@@ -1,9 +1,9 @@
 <?php
 /*
-Plugin Name: Enforce strong password
+Plugin Name: Enforce Strong Password
 Plugin URI: http://wordpress.org/extend/plugins/enforce-strong-password
 Description: Forces all users to have a strong password when they're changing it on their profile page.
-Version: 1.3
+Version: 1.3.1
 Author: Zaantar
 Author URI: http://zaantar.eu
 License: GPL2
@@ -53,8 +53,8 @@ class EnforceStrongPassword {
 	function admin_menu() {
 		if( !is_multisite() ) {
 			add_options_page( 
-				__( "Enforce Strong Passwords Options", self::txd ), 
-				__( "Enforce Strong Passwords", self::txd ),
+				__( "Enforce Strong Password", self::txd ), 
+				__( "Enforce Strong Password", self::txd ),
 				"manage_options",
 				self::slug,
 				array( &$this, "options_page" )
@@ -67,8 +67,8 @@ class EnforceStrongPassword {
 		if( is_multisite() ) {
 			add_submenu_page( 
 				"settings.php",
-				__( "Enforce Strong Passwords Options", self::txd ), 
-				__( "Enforce Strong Passwords", self::txd ),
+				__( "Enforce Strong Password", self::txd ), 
+				__( "Enforce Strong Password", self::txd ),
 				"manage_network_options",
 				self::slug,
 				array( &$this, "options_page" )
@@ -109,7 +109,7 @@ class EnforceStrongPassword {
 	function options_page_default() {
 		extract( $this->get_options() );
 		?>
-			<h2><?php _e( "Enforce Strong Passwords Options", self::txd ); ?></h2>
+			<h2><?php _e( "Enforce Strong Password", self::txd ); ?></h2>
 			<?php z::maybe_donation_button( $hide_donation_button, self::txd ); ?>
 			<h3><?php _e( "Options", self::txd ); ?></h3>
 			<form method="post">

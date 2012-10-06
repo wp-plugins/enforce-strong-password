@@ -4,7 +4,7 @@ Tags: strong, password, force, enforce
 Donate link: http://zaantar.eu/index.php?page=Donate
 Requires at least: 3.0
 Tested up to: 3.4.1
-Stable tag: 1.3
+Stable tag: 1.3.1
 
 Forces all users to have a strong password when they're changing it on their profile page.
 
@@ -26,9 +26,13 @@ That's it.
 
 == Frequently Asked Questions ==
 
-No questions asked yet. [Ask.](mailto:zaantar@zaantar.eu?subject=[wordpress-logging-service])
+No questions asked yet. [Ask.](mailto:zaantar@zaantar.eu?subject=[enforce-strong-password])
 
 == Changelog ==
+
+= 1.3.1 =
+* minor text changes
+* added pt_BR translation (thanks to Daniel Henrique Alves Lima)
 
 = 1.3 =
 * code refreshed (rewritten into php class)
