@@ -3,9 +3,10 @@
 Plugin Name: Enforce Strong Password
 Plugin URI: http://wordpress.org/extend/plugins/enforce-strong-password
 Description: Forces all users to have a strong password when they're changing it on their profile page.
-Version: 1.3.1
+Version: 1.3.2
 Author: Zaantar
 Author URI: http://zaantar.eu
+Donate Link: http://zaantar.eu/financni-prispevek
 License: GPL2
 */
 
@@ -41,6 +42,11 @@ class EnforceStrongPassword {
 		add_action( 'user_profile_update_errors', array( &$this, 'strong_password_enforcement' ), 0, 3 );
 		add_action( "admin_menu", array( &$this, "admin_menu" ) );
 		add_action( "network_admin_menu", array( &$this, "network_admin_menu" ) );
+		
+		/* There is no good filter/action for doing this in versions prior to WP 3.5. 
+		   For WP 3.5+, you can use add_action( "validate_password_reset", ... ) */
+		add_action( 'login_form_resetpass', array(&$this, 'enforce_reset_password') );
+		add_action( 'login_form_rp', array(&$this, 'enforce_reset_password') );
 	}
 	
 	
@@ -174,6 +180,19 @@ class EnforceStrongPassword {
 		}
 		return $errors;
 	}
+
+
+	function enforce_reset_password() {
+		 $errors = new WP_Error();
+		 if ( isset($_POST['pass1']) && !empty($_POST['pass1']) ) {
+		    $errors = $this->strong_password_enforcement($errors);
+		    $message = $errors->get_error_message();
+		    if (!empty($message)) {
+		       /* Don't allow weak passwords, no matter what. */
+		       wp_die($message);
+		    }
+		 }
+        }
 
 
 	// Check for password strength

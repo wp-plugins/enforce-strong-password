@@ -1,10 +1,10 @@
 === Enforce Strong Password ===
 Contributors: zaantar
 Tags: strong, password, force, enforce
-Donate link: http://zaantar.eu/index.php?page=Donate
+Donate link: http://zaantar.eu/financni-prispevek
 Requires at least: 3.0
 Tested up to: 3.4.1
-Stable tag: 1.3.1
+Stable tag: 1.3.2
 
 Forces all users to have a strong password when they're changing it on their profile page.
 
@@ -29,6 +29,9 @@ That's it.
 No questions asked yet. [Ask.](mailto:zaantar@zaantar.eu?subject=[enforce-strong-password])
 
 == Changelog ==
+
+= 1.3.2 =
+* enforce strong password also when resetting passwords (thanks to Daniel Henrique Alves Lima)
 
 = 1.3.1 =
 * minor text changes
