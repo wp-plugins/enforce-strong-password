@@ -3,7 +3,7 @@
 Plugin Name: Enforce Strong Password
 Plugin URI: http://wordpress.org/extend/plugins/enforce-strong-password
 Description: Forces all users to have a strong password when they're changing it on their profile page.
-Version: 1.3.2
+Version: 1.3.3
 Author: Zaantar
 Author URI: http://zaantar.eu
 Donate Link: http://zaantar.eu/financni-prispevek
