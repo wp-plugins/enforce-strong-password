@@ -11,10 +11,10 @@ License: GPL2
 */
 
 /*
-    Copyright 2010 Zaantar (email: zaantar@gmail.com)
+    Copyright (c) Zaantar (email: zaantar@gmail.com)
 
     This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License, version 2, as 
+    it under the terms of the GNU General Public License, version 2, as
     published by the Free Software Foundation.
 
     This program is distributed in the hope that it will be useful,
@@ -42,11 +42,7 @@ class EnforceStrongPassword {
 		add_action( 'user_profile_update_errors', array( &$this, 'strong_password_enforcement' ), 0, 3 );
 		add_action( "admin_menu", array( &$this, "admin_menu" ) );
 		add_action( "network_admin_menu", array( &$this, "network_admin_menu" ) );
-		
-		/* There is no good filter/action for doing this in versions prior to WP 3.5. 
-		   For WP 3.5+, you can use add_action( "validate_password_reset", ... ) */
-		add_action( 'login_form_resetpass', array(&$this, 'enforce_reset_password') );
-		add_action( 'login_form_rp', array(&$this, 'enforce_reset_password') );
+		add_action( "validate_password_reset", array(&$this, "validate_password_reset") );
 	}
 	
 	
@@ -58,8 +54,8 @@ class EnforceStrongPassword {
 	
 	function admin_menu() {
 		if( !is_multisite() ) {
-			add_options_page( 
-				__( "Enforce Strong Password", self::txd ), 
+			add_options_page(
+				__( "Enforce Strong Password", self::txd ),
 				__( "Enforce Strong Password", self::txd ),
 				"manage_options",
 				self::slug,
@@ -71,9 +67,9 @@ class EnforceStrongPassword {
 	
 	function network_admin_menu() {
 		if( is_multisite() ) {
-			add_submenu_page( 
+			add_submenu_page(
 				"settings.php",
-				__( "Enforce Strong Password", self::txd ), 
+				__( "Enforce Strong Password", self::txd ),
 				__( "Enforce Strong Password", self::txd ),
 				"manage_network_options",
 				self::slug,
@@ -127,7 +123,7 @@ class EnforceStrongPassword {
 			        	</th>
 			        	<td>
 			        		<select name="settings[minimal_required_strength]">
-			        			<?php 
+			        			<?php
 			        				for( $i = 1; $i <= 4; ++$i ) {
 			        					echo "<option value=\"$i\" ".selected( $i, $minimal_required_strength, false ).">$i</option>";
 			        				}
@@ -136,10 +132,10 @@ class EnforceStrongPassword {
 			        	</td>
 			        	<td>
 			        		<small>
-			        			<?php 
+			        			<?php
 			        				printf( __( 'Larger value means stronger password. Recommended value is %s', self::txd ),
 			        					4
-			        				); 
+			        				);
 			        			?>
 			        		</small>
 			        	</td>
@@ -149,7 +145,7 @@ class EnforceStrongPassword {
 			        		<label><?php _e( 'Hide donation button', self::txd ); ?></label><br />
 			        	</th>
 			        	<td>
-			        		<input type="checkbox" name="settings[hide_donation_button]" 
+			        		<input type="checkbox" name="settings[hide_donation_button]"
 			        			<?php checked( $hide_donation_button ); ?>
 			        		/>
 			        	</td>
@@ -165,15 +161,16 @@ class EnforceStrongPassword {
 	/*source: http://sltaylor.co.uk/blog/enforce-strong-wordpress-passwords/ */
 	function strong_password_enforcement( $errors ) {
 		extract( $this->get_options() );
+		get_currentuserinfo();
 	
-		if ( !$errors->get_error_data("pass") 
-		  && $_POST["pass1"] 
-		  && $this->get_password_strength( $_POST["pass1"], $_POST["user_login"] ) < $minimal_required_strength ) {
-			$errors->add( 
-				'pass', 
-				sprintf( 
+		if ( !$errors->get_error_data("pass")
+		  && $_POST["pass1"]
+		  && $this->get_password_strength( $_POST["pass1"], $current_user->user_login ) < $minimal_required_strength ) {
+			$errors->add(
+				'pass',
+				sprintf(
 					__( 'Please enter a %sstronger%s password to ensure your and this blog\'s security.', self::txd ),
-					"<strong>", 
+					"<strong>",
 					"</strong>"
 				)
 			);
@@ -181,18 +178,10 @@ class EnforceStrongPassword {
 		return $errors;
 	}
 
-
-	function enforce_reset_password() {
-		 $errors = new WP_Error();
-		 if ( isset($_POST['pass1']) && !empty($_POST['pass1']) ) {
-		    $errors = $this->strong_password_enforcement($errors);
-		    $message = $errors->get_error_message();
-		    if (!empty($message)) {
-		       /* Don't allow weak passwords, no matter what. */
-		       wp_die($message);
-		    }
-		 }
-        }
+    
+    function validate_password_reset( $errors, $user = NULL ) {
+		$this->strong_password_enforcement( $errors );
+	}
 
 
 	// Check for password strength
