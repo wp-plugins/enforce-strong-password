@@ -30,6 +30,9 @@ No questions asked yet. [Ask.](mailto:zaantar@zaantar.eu?subject=[enforce-strong
 
 == Changelog ==
 
+= 1.3.4 =
+* Fix warnings while updating user profile.
+
 = 1.3.3 =
 * Use validate_password_reset hook introduced in WordPress 3.5.
 * Fix compatibility issue with WordPress 3.5.1 while resetting password.

@@ -39,7 +39,7 @@ class EnforceStrongPassword {
 
 	function __construct() {
 		add_action( 'init', array( &$this, 'load_textdomain' ) );
-		add_action( 'user_profile_update_errors', array( &$this, 'strong_password_enforcement' ), 0, 3 );
+		add_action( 'user_profile_update_errors', array( &$this, 'validate_password_reset' ), 0, 2 );
 		add_action( "admin_menu", array( &$this, "admin_menu" ) );
 		add_action( "network_admin_menu", array( &$this, "network_admin_menu" ) );
 		add_action( "validate_password_reset", array(&$this, "validate_password_reset") );
@@ -159,28 +159,24 @@ class EnforceStrongPassword {
 	
 	
 	/*source: http://sltaylor.co.uk/blog/enforce-strong-wordpress-passwords/ */
-	function strong_password_enforcement( $errors ) {
+    function validate_password_reset( $errors, $user = NULL ) {
 		extract( $this->get_options() );
-		get_currentuserinfo();
-	
+		if($user == NULL) {
+			$user = get_userdata( get_current_user_id() );
+		}
+		$user_login = isset( $user->user_login ) ? $user->user_login : "";
+		
 		if ( !$errors->get_error_data("pass")
-		  && $_POST["pass1"]
-		  && $this->get_password_strength( $_POST["pass1"], $current_user->user_login ) < $minimal_required_strength ) {
+				&& $_POST["pass1"]
+				&& $this->get_password_strength( $_POST["pass1"], $user_login) < $minimal_required_strength ) {
 			$errors->add(
-				'pass',
-				sprintf(
-					__( 'Please enter a %sstronger%s password to ensure your and this blog\'s security.', self::txd ),
-					"<strong>",
-					"</strong>"
-				)
-			);
+					'pass',
+					sprintf(
+							__( 'Please enter a %sstronger%s password to ensure your and this blog\'s security.', self::txd ),
+							"<strong>",
+							"</strong>"	) );
 		}
 		return $errors;
-	}
-
-    
-    function validate_password_reset( $errors, $user = NULL ) {
-		$this->strong_password_enforcement( $errors );
 	}
 
 
