@@ -4,7 +4,7 @@ Tags: strong, password, force, enforce
 Donate link: http://zaantar.eu/financni-prispevek
 Requires at least: 3.5.1
 Tested up to: 3.5.1
-Stable tag: 1.3.4
+Stable tag: 1.3.5
 
 Forces all users to have a strong password when they're changing it on their profile page.
 
@@ -29,6 +29,9 @@ That's it.
 No questions asked yet. [Ask.](mailto:zaantar@zaantar.eu?subject=[enforce-strong-password])
 
 == Changelog ==
+
+= 1.3.5 =
+* Added Dutch language files (thanks to Ronald de Caluwé)
 
 = 1.3.4 =
 * Fix warnings while updating user profile.

@@ -3,7 +3,7 @@
 Plugin Name: Enforce Strong Password
 Plugin URI: http://wordpress.org/extend/plugins/enforce-strong-password
 Description: Forces all users to have a strong password when they're changing it on their profile page.
-Version: 1.3.4
+Version: 1.3.5
 Author: Zaantar
 Author URI: http://zaantar.eu
 Donate Link: http://zaantar.eu/financni-prispevek
@@ -35,7 +35,7 @@ class EnforceStrongPassword {
 
 	const slug = 'enforce-strong-password';
 	const txd = self::slug;
-	
+
 
 	function __construct() {
 		add_action( 'init', array( &$this, 'load_textdomain' ) );
@@ -44,14 +44,14 @@ class EnforceStrongPassword {
 		add_action( "network_admin_menu", array( &$this, "network_admin_menu" ) );
 		add_action( "validate_password_reset", array(&$this, "validate_password_reset") );
 	}
-	
-	
+
+
 	function load_textdomain() {
 		$plugin_dir = basename(dirname(__FILE__));
 		load_plugin_textdomain( self::txd, false, $plugin_dir.'/languages' );
 	}
-	
-	
+
+
 	function admin_menu() {
 		if( !is_multisite() ) {
 			add_options_page(
@@ -63,8 +63,8 @@ class EnforceStrongPassword {
 			);
 		}
 	}
-	
-	
+
+
 	function network_admin_menu() {
 		if( is_multisite() ) {
 			add_submenu_page(
@@ -75,11 +75,11 @@ class EnforceStrongPassword {
 				self::slug,
 				array( &$this, "options_page" )
 			);
-		
+
 		}
 	}
-	
-	
+
+
 	function get_options() {
 		$defaults = array(
 			"minimal_required_strength" => 4,
@@ -88,8 +88,8 @@ class EnforceStrongPassword {
 		$options = get_site_option( self::slug, array() );
 		return wp_parse_args( $options, $defaults );
 	}
-	
-	
+
+
 	function options_page() {
 		echo "<div id=\"wrap\">";
 		$action = isset( $_REQUEST["action"] ) ? $_REQUEST["action"] : "default";
@@ -106,8 +106,8 @@ class EnforceStrongPassword {
 		}
 		echo "</div>";
 	}
-	
-	
+
+
 	function options_page_default() {
 		extract( $this->get_options() );
 		?>
@@ -156,8 +156,8 @@ class EnforceStrongPassword {
 			</form>
 		<?php
 	}
-	
-	
+
+
 	/*source: http://sltaylor.co.uk/blog/enforce-strong-wordpress-passwords/ */
     function validate_password_reset( $errors, $user = NULL ) {
 		extract( $this->get_options() );
@@ -165,7 +165,7 @@ class EnforceStrongPassword {
 			$user = get_userdata( get_current_user_id() );
 		}
 		$user_login = isset( $user->user_login ) ? $user->user_login : "";
-		
+
 		if ( !$errors->get_error_data("pass")
 				&& $_POST["pass1"]
 				&& $this->get_password_strength( $_POST["pass1"], $user_login) < $minimal_required_strength ) {
